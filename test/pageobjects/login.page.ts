@@ -1,41 +1,37 @@
-import { $ } from '@wdio/globals'
-import Page from './page';
+import Page from "./page";
 
-/**
- * sub page containing specific selectors and methods for a specific page
- */
 class LoginPage extends Page {
-    /**
-     * define selectors using getter methods
-     */
-    public get inputUsername () {
-        return $('#username');
-    }
+  get username() {
+    return $('[data-test="username"]');
+  }
 
-    public get inputPassword () {
-        return $('#password');
-    }
+  get password() {
+    return $('[data-test="password"]');
+  }
 
-    public get btnSubmit () {
-        return $('button[type="submit"]');
-    }
+  get loginBtn() {
+    return $('[data-test="login-button"]');
+  }
 
-    /**
-     * a method to encapsule automation code to interact with the page
-     * e.g. to login using username and password
-     */
-    public async login (username: string, password: string) {
-        await this.inputUsername.setValue(username);
-        await this.inputPassword.setValue(password);
-        await this.btnSubmit.click();
-    }
+  get error() {
+    return $('[data-test="error"]');
+  }
 
-    /**
-     * overwrite specific options to adapt it to page object
-     */
-    public open () {
-        return super.open('login');
-    }
+  async open() {
+    await super.open("/");
+  }
+
+  async login(user: string, pass: string) {
+    await this.username.waitForDisplayed();
+    await this.username.setValue(user);
+    await this.password.setValue(pass);
+    await this.loginBtn.click();
+  }
+
+  async expectErrorContains(text: string) {
+    await this.error.waitForDisplayed();
+    await expect(this.error).toHaveText(expect.stringContaining(text));
+  }
 }
 
 export default new LoginPage();
