@@ -1,5 +1,19 @@
 // test/specs/saucedo.e2e.spec.ts
 import { expect } from "@wdio/globals";
+import { logger } from "../utils/logger";
+
+
+describe('Open Swag Labs (WDIO)', () => {
+  it('successful login redirects to Inventory page', async () => {
+    logger.info('START: successful login test');
+
+    await browser.url('https://www.saucedemo.com/');
+    logger.debug('Opened Saucedemo');
+
+    logger.info('END: successful login test');
+  });
+});
+
 
 import loginPage from "../pageobjects/login.page";
 import inventoryPage from "../pageobjects/inventory.page";
