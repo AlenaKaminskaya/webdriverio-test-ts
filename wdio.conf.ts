@@ -1,3 +1,6 @@
+import { logger } from "./test/utils/logger";
+
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -300,4 +303,19 @@ export const config: WebdriverIO.Config = {
     */
     // afterAssertion: function(params) {
     // }
+before: function () {
+  logger.info("WDIO run started");
+},
+
+afterTest: function (test, context, { error, passed }) {
+  if (passed) {
+    logger.info(`PASSED: ${test.title}`);
+  } else {
+    logger.error(`FAILED: ${test.title}`);
+    if (error) logger.error(error);
+  }
+},
+after: function () {
+  logger.info("WDIO run finished");
+},
 }
