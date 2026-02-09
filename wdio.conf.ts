@@ -1,3 +1,6 @@
+import { logger } from "./test/utils/logger";
+
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -125,7 +128,14 @@ export const config: WebdriverIO.Config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec','dot'],
+   reporters: [
+  'spec',
+  ['allure', {
+    outputDir: 'allure-results',
+    disableWebdriverStepsReporting: false,
+    disableWebdriverScreenshotsReporting: false,
+  }],
+],
 
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -293,4 +303,19 @@ export const config: WebdriverIO.Config = {
     */
     // afterAssertion: function(params) {
     // }
+before: function () {
+  logger.info("WDIO run started");
+},
+
+afterTest: function (test, context, { error, passed }) {
+  if (passed) {
+    logger.info(`PASSED: ${test.title}`);
+  } else {
+    logger.error(`FAILED: ${test.title}`);
+    if (error) logger.error(error);
+  }
+},
+after: function () {
+  logger.info("WDIO run finished");
+},
 }
